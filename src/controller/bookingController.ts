@@ -45,7 +45,7 @@ function subtractHours(date:Date, hours: number) {
 
 
 const createBooking = async (req:Request, res: Response) => {
-	const route = await Route.findOne({name:req.body.route});
+	const route = await Route.findById(req.body.route);
 	const user = await User.findOne({name: req.body.userName});
 	if(!user || !route){
 		return res.json(user).status(404);
@@ -85,25 +85,27 @@ const updateBooking = async (req: Request, res: Response) => {
 
 
   const _id = req.params.id; // Aixi ho fa el profe pero al Barto no li mola peor ns si el req.body sirve
-  const { route, user, dayOfCreation, price, cancelPolicy, selectedStopPoint } = req.body; // Destructuring, aquesta linea el que fa es crear 6 -
+  const user = await User.findOne({name: req.body.userName});
+  const route = await Route.findOne({name: req.body.route});
+
+  if( !user || !route){
+	return res.status(404).json("route or user not found");
+  }
+  const price  = req.body.price; // Destructuring, aquesta linea el que fa es crear 6 -
+  const selectedStopPoint  = req.body.selectedStopPoint; // Destructuring, aquesta linea el que fa es crear 6 -
   // - variables i les guarda, 6 variables amb el mateix route, user ...
 
-  const updatedBooking = await Booking.findByIdAndUpdate(_id, {
-// Fa la cerca i el mateix metode del mongo actualitza i ens torna la nova versio al "todo"
-    route,
-    user,
-    dayOfCreation,
-    price,
-	cancelPolicy,
 
 // si no esta algun es crea s'indiica amb el {new: true}
-  }, {new: true}); // Creem el Booking si no el trobem?
+const booking = await Booking.findByIdAndUpdate(req.params.id,{route,user,price,selectedStopPoint},{new:true});
+
+
+return res.json({message: "Booking updated",booking}).status(200);
 
 //   return res.json({
 //     message: "Booking updated",
 //     updatedBooking
 //   });
-  res.json({updatedBooking}).status(200)
 
 }
 

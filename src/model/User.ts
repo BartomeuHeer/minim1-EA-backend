@@ -31,7 +31,11 @@ const User = new Schema({
 	vehicle: {
 		type: Schema.Types.ObjectId,
 		ref: "Vehicle"
-	}
+	},
+	complaints: [{
+		type: Schema.Types.ObjectId,
+		ref: "Complaint"
+	}]
 });
 
 export default model('User', User);

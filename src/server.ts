@@ -5,6 +5,7 @@ import cors from "cors";
 import User from "./api/User";
 import Booking from "./api/Booking";
 import Route from "./api/Route";
+import Complaint from "./api/Complaint"
 
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(cors());
 app.use('/api/users', User)
 app.use('/api/bookings', Booking)
 app.use('/api/routes', Route)
+app.use('/api/complaints', Complaint)
 
 // Idle
 app.get('/', ( req: express.Request, res: express.Response ) => {
